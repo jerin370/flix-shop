@@ -1,5 +1,4 @@
 name: Deploy Angular to GitHub Pages
-
 on:
   push:
     branches:
@@ -38,7 +37,7 @@ jobs:
         run: npm ci
         
       - name: Build Angular app
-        run: npm run build
+        run: npm run build -- --base-href=/flix-shop/
         
       - name: Debug - List build output
         run: |
@@ -51,10 +50,52 @@ jobs:
             ls -la dist/flix-shop/
           fi
               
+      - name: Determine upload path and create necessary files
+        run: |
+          # Find the correct path for index.html
+          if [ -f "dist/flix-shop/browser/index.html" ]; then
+            BUILD_PATH="dist/flix-shop/browser"
+            echo "Found files in dist/flix-shop/browser/"
+          elif [ -f "dist/flix-shop/index.html" ]; then
+            BUILD_PATH="dist/flix-shop"
+            echo "Found files in dist/flix-shop/"
+          elif [ -f "dist/index.html" ]; then
+            BUILD_PATH="dist"
+            echo "Found files in dist/"
+          else
+            echo "Could not find index.html in expected locations"
+            find dist -name "index.html" -type f
+            exit 1
+          fi
+          
+          # Copy index.html to 404.html for Angular routing
+          cp $BUILD_PATH/index.html $BUILD_PATH/404.html
+          
+          # Create .nojekyll file to disable Jekyll processing
+          touch $BUILD_PATH/.nojekyll
+          
+          # Create _config.yml for Jekyll configuration
+          cat > $BUILD_PATH/_config.yml << 'EOF'
+          plugins: []
+          include: ["*"]
+          exclude: []
+          keep_files: ["*"]
+          baseurl: "/flix-shop"
+          url: "https://jerin370.github.io"
+          markdown: kramdown
+          highlighter: none
+          safe: true
+          incremental: false
+          EOF
+          
+          echo "BUILD_PATH=$BUILD_PATH" >> $GITHUB_ENV
+          echo "Will upload from: $BUILD_PATH"
+          echo "Created .nojekyll and _config.yml files"
+              
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.UPLOAD_PATH }}
+          path: ${{ env.BUILD_PATH }}
 
   # Deployment job
   deploy:
