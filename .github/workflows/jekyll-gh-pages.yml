@@ -27,10 +27,7 @@ jobs:
         
       - name: Build Angular app
         run: npm run build -- --output-path=dist/flix-shop --base-href=/flix-shop/
-        
-      - name: Copy index.html to 404.html
-        run: cp ./dist/flix-shop/index.html ./dist/flix-shop/404.html
-        
+                
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
