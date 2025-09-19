@@ -50,25 +50,7 @@ jobs:
             echo "Contents of dist/flix-shop:"
             ls -la dist/flix-shop/
           fi
-        
-      - name: Copy index.html to 404.html (for Angular routing)
-        run: |
-          # Find the correct path for index.html and copy to 404.html
-          if [ -f "dist/flix-shop/browser/index.html" ]; then
-            cp dist/flix-shop/browser/index.html dist/flix-shop/browser/404.html
-            UPLOAD_PATH="dist/flix-shop/browser"
-          elif [ -f "dist/flix-shop/index.html" ]; then
-            cp dist/flix-shop/index.html dist/flix-shop/404.html
-            UPLOAD_PATH="dist/flix-shop"
-          elif [ -f "dist/index.html" ]; then
-            cp dist/index.html dist/404.html
-            UPLOAD_PATH="dist"
-          else
-            echo "Could not find index.html in expected locations"
-            exit 1
-          fi
-          echo "UPLOAD_PATH=$UPLOAD_PATH" >> $GITHUB_ENV
-        
+              
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
