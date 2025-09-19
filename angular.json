@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "demo": {
+    "flix-shop": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/demo",
+            "outputPath": "dist/flix-shop",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -50,10 +50,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "demo:build:production"
+              "buildTarget": "flix-shop:build:production"
             },
             "development": {
-              "buildTarget": "demo:build:development"
+              "buildTarget": "flix-shop:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -61,7 +61,7 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/demo/server",
+            "outputPath": "dist/flix-shop/server",
             "main": "server.ts",
             "tsConfig": "tsconfig.server.json"
           }
@@ -70,12 +70,12 @@
           "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "configurations": {
             "development": {
-              "browserTarget": "demo:build:development",
-              "serverTarget": "demo:server"
+              "browserTarget": "flix-shop:build:development",
+              "serverTarget": "flix-shop:server"
             },
             "production": {
-              "browserTarget": "demo:build:production",
-              "serverTarget": "demo:server"
+              "browserTarget": "flix-shop:build:production",
+              "serverTarget": "flix-shop:server"
             }
           },
           "defaultConfiguration": "development"
